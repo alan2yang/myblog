@@ -28,7 +28,7 @@ class BaseConfig(object):
     # BLUELOG_MANAGE_POST_PER_PAGE = 15
     BLOG_COMMENT_PER_PAGE = 5
     # 主题
-    BLOG_THEMES = {'perfect_blue': 'Perfect Blue', 'black_swan': 'Black Swan'}
+    BLOG_THEMES = {'perfect_blue': 'Perfect Blue', 'black_swan': 'Black Swan','pulse':'Purple','materia':'Materia'}
 
 
 class DevelopmentConfig(BaseConfig):

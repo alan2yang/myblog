@@ -1,6 +1,8 @@
 from flask import Blueprint
+from flask import abort
 from flask import current_app
 from flask import flash
+from flask import make_response
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -10,6 +12,7 @@ from myblog.extensions import db
 from myblog.models import Post,Category,Comment
 from myblog.forms import CommentForm, AdminCommentForm
 from flask_login import current_user
+from myblog.utils import redirect_back
 
 
 blog_bp = Blueprint('blog', __name__)
@@ -138,3 +141,9 @@ def change_theme(theme_name):
     :param theme_name:
     :return:
     """
+    if theme_name not in current_app.config['BLOG_THEMES'].keys():
+        abort(404)
+
+    response = make_response(redirect_back())  # 重定向到上一个请求页面
+    response.set_cookie('theme', theme_name, max_age=30 * 24 * 60 * 60)  # 将主题名保存在cookie中
+    return response
