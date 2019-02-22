@@ -1,4 +1,5 @@
-# 辅助重定向函数
+# 扩展功能
+
 try:
     from urlparse import urlparse, urljoin
 except ImportError:
