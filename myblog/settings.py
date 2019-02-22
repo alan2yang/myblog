@@ -26,7 +26,7 @@ class BaseConfig(object):
     BLOG_EMAIL = os.getenv('BLOG_EMAIL')
     BLOG_POST_PER_PAGE = 5
     # BLUELOG_MANAGE_POST_PER_PAGE = 15
-    # BLUELOG_COMMENT_PER_PAGE = 15
+    BLOG_COMMENT_PER_PAGE = 5
     # 主题
     BLOG_THEMES = {'perfect_blue': 'Perfect Blue', 'black_swan': 'Black Swan'}
 
