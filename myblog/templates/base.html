@@ -92,6 +92,7 @@
             </p>
             <p class="float-right">
                 <small>
+{#                登录按钮#}
                     {% if current_user.is_authenticated %}
                         <a href="{{ url_for('auth.logout', next=request.full_path) }}">Logout</a>
                     {% else %}

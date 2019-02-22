@@ -121,8 +121,14 @@ def show_category(category_id):
     :param post_id:
     :return:
     """
-    return "category detail:%d" % category_id
-    # return render_template('blog/category.html')
+    # todo 有个bug:通过分类详情页看到的文章评论数有误差，显示的是总评论数（包括没有通过管理员审核的评论）
+    category=Category.query.get_or_404(category_id)
+    page_now=request.args.get('page',1,type=int)
+    per_page = current_app.config['BLOG_POST_PER_PAGE']
+    pagination=Post.query.with_parent(category).order_by(Post.timestamp.desc()).paginate(page_now,per_page=per_page)
+    posts=pagination.items
+
+    return render_template('blog/category.html',category=category,pagination=pagination,posts=posts)
 
 
 @blog_bp.route('/change-theme/<theme_name>')
@@ -132,4 +138,3 @@ def change_theme(theme_name):
     :param theme_name:
     :return:
     """
-    pass
