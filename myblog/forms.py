@@ -8,6 +8,9 @@ from myblog.models import Category
 
 
 class LoginForm(FlaskForm):
+    """
+    管理员登录表单
+    """
     username = StringField('Username', validators=[DataRequired(), Length(1, 20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(1, 128)])
     remember = BooleanField('Remember me')
@@ -23,22 +26,34 @@ class SettingForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
+    """
+    新建文章　　表单
+    """
     title = StringField('Title', validators=[DataRequired(), Length(1, 60)])
-    category = SelectField('Category', coerce=int, default=1)
+    category = SelectField('Category', coerce=int, default=1)  # 下拉选项
     body = CKEditorField('Body', validators=[DataRequired()])
     submit = SubmitField()
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
+        # 返回分类id和名称元组列表
         self.category.choices = [(category.id, category.name)
                                  for category in Category.query.order_by(Category.name).all()]
 
 
 class CategoryForm(FlaskForm):
+    """
+    新建分类　　表单
+    """
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     submit = SubmitField()
 
     def validate_name(self, field):
+        """
+        自定义行内验证器：保证分类名不重复
+        :param field:
+        :return:
+        """
         if Category.query.filter_by(name=field.data).first():
             raise ValidationError('Name already in use.')
 

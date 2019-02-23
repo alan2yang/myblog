@@ -24,9 +24,9 @@ class BaseConfig(object):
     # MAIL_DEFAULT_SENDER = ('Bluelog Admin', MAIL_USERNAME)
     #
     BLOG_EMAIL = os.getenv('BLOG_EMAIL')
-    BLOG_POST_PER_PAGE = 5
-    # BLUELOG_MANAGE_POST_PER_PAGE = 15
-    BLOG_COMMENT_PER_PAGE = 5
+    BLOG_POST_PER_PAGE = 7
+    BLOG_MANAGE_POST_PER_PAGE = 10
+    BLOG_COMMENT_PER_PAGE = 7
     # 主题
     BLOG_THEMES = {'perfect_blue': 'Perfect Blue',
                    'black_swan': 'Black Swan',

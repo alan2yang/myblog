@@ -30,7 +30,7 @@ class Category(db.Model):
     posts = db.relationship('Post', back_populates='category')
 
     def delete(self):
-        # todo  function?
+        # 如果分类被删除则该分类下的文章转移到Default分类下
         """
         :return:
         """

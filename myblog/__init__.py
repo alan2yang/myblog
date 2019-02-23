@@ -4,11 +4,12 @@ import os
 
 import click
 from flask import Flask, render_template
+from flask_login import current_user
 
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.auth import auth_bp
 from myblog.blueprints.blog import blog_bp
-from myblog.extensions import bootstrap, db, ckeditor, moment,login_manager
+from myblog.extensions import bootstrap, db, ckeditor, moment,login_manager,csrf
 from myblog.models import Admin, Post, Category, Comment,Link
 from myblog.settings import config
 
@@ -53,6 +54,7 @@ def register_extensions(app):
     ckeditor.init_app(app)
     moment.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
 
 def register_blueprints(app):
@@ -88,12 +90,11 @@ def register_template_context(app):
         admin = Admin.query.first()
         categories = Category.query.order_by(Category.name).all()
         links = Link.query.order_by(Link.name).all()
-        # todo 认证登录
-        # if current_user.is_authenticated:
-        #     unread_comments = Comment.query.filter_by(reviewed=False).count()
-        # else:
-        #     unread_comments = None
-        unread_comments=None
+        # 未审核评论数
+        unread_comments = None
+        if current_user.is_authenticated:
+            unread_comments = Comment.query.filter_by(reviewed=False).count()
+
         return dict(
             admin=admin, categories=categories,
             links=links, unread_comments=unread_comments)
