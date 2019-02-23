@@ -30,9 +30,8 @@ class BaseConfig(object):
     # 主题
     BLOG_THEMES = {'perfect_blue': 'Perfect Blue',
                    'black_swan': 'Black Swan',
-                   'pulse':'Purple',
-                   'materia':'Materia',
-                   'minty':'Minty'
+                   # 'pulse':'Purple',# 太丑
+                   'materia':'Materia'
                    }
 
 

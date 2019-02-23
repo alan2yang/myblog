@@ -5,6 +5,7 @@ import os
 import click
 from flask import Flask, render_template
 from flask_login import current_user
+from flask_wtf.csrf import CSRFError
 
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.auth import auth_bp
@@ -118,6 +119,9 @@ def register_errors(app):
     def internal_server_error(e):
         return render_template('errors/500.html'), 500
 
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        return render_template('errors/400.html', description=e.description), 400
 
 def register_commands(app):
     """

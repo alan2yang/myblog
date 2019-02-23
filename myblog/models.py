@@ -78,9 +78,8 @@ class Comment(db.Model):
 
 
 class Link(db.Model):
-    # todo fucntion?
     """
-
+    外链
     """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
