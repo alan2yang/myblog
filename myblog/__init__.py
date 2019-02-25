@@ -3,6 +3,9 @@
 import os
 
 import click
+import logging
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask, render_template
 from flask_login import current_user
 from flask_wtf.csrf import CSRFError
@@ -10,7 +13,7 @@ from flask_wtf.csrf import CSRFError
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.auth import auth_bp
 from myblog.blueprints.blog import blog_bp
-from myblog.extensions import bootstrap, db, ckeditor, moment,login_manager,csrf
+from myblog.extensions import bootstrap, db, ckeditor, moment,login_manager,csrf, migrate
 from myblog.models import Admin, Post, Category, Comment,Link
 from myblog.settings import config
 
@@ -36,12 +39,25 @@ def create_app(config_name=None):
 
 
 def register_logging(app):
+    # todo　通过邮件发送关键日志
     """
     注册日志功能
     :param app:
     :return:
     """
-    pass
+    # 日志记录器
+    app.logger.setLevel(logging.INFO)  # 日志记录器等级
+
+    formatter=logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    # 日志处理器
+    file_handler=RotatingFileHandler('logs/blog.log',maxBytes=10*1024*1024,backupCount=10)
+
+    file_handler.setFormatter(formatter)  # 日志处理器输出的日志格式
+    file_handler.setLevel(logging.INFO)  # 日志处理器接收的日志等级
+
+    if not app.debug:  # 不是调试模式，启动日志记录器
+        app.logger.addHandler(file_handler)
 
 
 def register_extensions(app):
@@ -56,6 +72,7 @@ def register_extensions(app):
     moment.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    migrate.init_app(app,db)
 
 
 def register_blueprints(app):
@@ -122,6 +139,7 @@ def register_errors(app):
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
         return render_template('errors/400.html', description=e.description), 400
+
 
 def register_commands(app):
     """
