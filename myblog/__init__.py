@@ -34,7 +34,8 @@ def create_app(config_name=None):
     register_errors(app)
     register_shell_context(app)
     register_template_context(app)
-
+    register_template_filter(app)
+    
     return app
 
 
@@ -84,6 +85,26 @@ def register_blueprints(app):
     app.register_blueprint(blog_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp, url_prefix='/auth')
+
+
+def register_template_filter(app):
+    """
+    注册模板过滤器
+    :param app:
+    :return:
+    """
+    @app.template_filter('post_comments_length')
+    def post_comments_length(comments):
+        """
+        首页文章评论数过滤器
+        :param comments: 
+        :return: 
+        """
+        count=0
+        for comment in comments:
+            if comment.reviewed:
+                count +=1
+        return count
 
 
 def register_shell_context(app):
